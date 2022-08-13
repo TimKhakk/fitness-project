@@ -1,6 +1,14 @@
 import type { MetaFunction, LinksFunction } from '@remix-run/node';
 import styles from './styles/app.css';
-import { Links, LiveReload, Meta, Outlet, Scripts, ScrollRestoration } from '@remix-run/react';
+import {
+  Link,
+  Links,
+  LiveReload,
+  Meta,
+  Outlet,
+  Scripts,
+  ScrollRestoration,
+} from '@remix-run/react';
 
 const LATO_FONT_URL = 'https://fonts.googleapis.com/css2?family=Lato:wght@400;700;900&display=swap';
 
@@ -24,7 +32,11 @@ export default function App() {
         <Meta />
         <Links />
       </head>
-      <body>
+      <body className="flex flex-col gap-5 container px-4 lg:mx-auto font-body pt-8 bg-light min-h-screen">
+        <section className="flex items-start gap-5">
+          <Link className='font-bold underline text-blue-600' to="/">Home</Link>
+          <Link className='font-bold underline text-blue-600' to="workouts">Workouts</Link>
+        </section>
         <Outlet />
         <ScrollRestoration />
         <Scripts />
