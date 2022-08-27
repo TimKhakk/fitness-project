@@ -1,22 +1,50 @@
 import { useState } from 'react';
-import workouts from '../../database/workouts.json';
+import type { ActionFunction, LoaderFunction } from '@remix-run/node';
 import Switcher from '~/components/Switcher';
-import { Link } from '@remix-run/react';
+import { Link, useLoaderData } from '@remix-run/react';
 import Button from '~/components/Button';
+import { redis } from '~/redis/index.server';
+import { destroyWorkout } from '~/api/destroyWorkout';
+
+export const loader: LoaderFunction = async () => {
+  const data = await redis.hvals('timur:workouts');
+  console.log('🚀 ~ data', data);
+
+  if (data === undefined) {
+    return {
+      data: null,
+    };
+  }
+
+  return {
+    data,
+  };
+};
+
+export const action: ActionFunction = async ({ request }) => {
+  // createWorkout(form)
+
+  // return redirect('/workouts');
+};
+
 
 export default function Workouts() {
   const [editMode, setEditMode] = useState(false);
+  const { data: workouts } = useLoaderData();
+
   return (
     <>
       <Switcher active={editMode} onClick={() => setEditMode(!editMode)}>Edit mode</Switcher>
       <div className="flex gap-5 flex-col">
-        {workouts.map((w) => (
-          <Link to={w.id} className="flex bg-white rounded-2xl p-3 gap-3" key={w.id}>
+        {workouts === null ? (
+          <div>No data</div>
+        ) : workouts.map((w) => (
+          <div className="flex bg-white rounded-2xl p-3 gap-3" key={w.id}>
             <img src={w.picture} alt={w.name} className="w-24 h-24" />
-            <h4 className="font-medium text-base">{w.name}</h4>
+            <Link to={w.id || '001'} className="font-medium text-base">{w.name}</Link>
             {editMode && <Button>Edit</Button>}
             {editMode && <Button>Delete</Button>}
-          </Link>
+          </div>
         ))}
         {editMode && (
           <Link to="new" className="flex bg-white rounded-2xl p-3 gap-3">
