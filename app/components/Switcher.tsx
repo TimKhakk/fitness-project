@@ -9,16 +9,27 @@ interface Props
   active: boolean;
   children: ReactNode;
 }
-export default function Switcher({ active, children, ...props }: Props) {
+export function Switcher({ active, children, ...props }: Props) {
   return (
     <button
-      className={cn('transition py-1 px-3 rounded font-bold flex max-w-max', {
-        'btn-primary': active,
-        'btn-secondary': !active,
-      })}
+      className="flex items-center gap-3 transition p-3 font-bold max-w-max"
       {...props}
     >
-      {children}
+      <div className="flex items-center">
+        <span
+          className={cn('rounded-lg w-[34px] h-[14px]', {
+            'bg-emerald-300': active,
+            'bg-gray-400': !active,
+          })}
+        />
+        <span
+          className={cn('transition w-5 h-5 p-2 rounded-full absolute z-10 shadow', {
+            'translate-x-4 bg-emerald-600': active,
+            'bg-white': !active,
+          })}
+        />
+      </div>
+      <span className=''>{children}</span>
     </button>
   );
 }

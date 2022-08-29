@@ -8,11 +8,16 @@ interface Props
   > {
   children: ReactNode;
   className?: string;
+  variant?: 'primary'
 }
 
-export default function Button({ children, className, ...props }: Props) {
+const CLASSNAME = 'button'
+
+export function Button({ children, className, variant, ...props }: Props) {
   return (
-    <button className={cn("transition py-1 px-3 rounded font-bold flex max-w-max", className)} {...props}>
+    <button className={cn(CLASSNAME, {
+      [`${CLASSNAME}-${variant}`]: variant,
+    })} {...props}>
       {children}
     </button>
   );
